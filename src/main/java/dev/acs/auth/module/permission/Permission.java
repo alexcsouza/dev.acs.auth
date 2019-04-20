@@ -1,0 +1,36 @@
+package dev.acs.auth.module.permission;
+
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToOne;
+
+import dev.acs.auth.core.persistence.PersistentEntity;
+import dev.acs.auth.module.functionality.Functionality;
+import dev.acs.auth.module.permissiongroup.PermissionGroup;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
+public class Permission extends PersistentEntity {
+
+	private static final long serialVersionUID = -6708078788530807565L;
+	
+	private String name;
+	private String description;
+	private String label;
+
+	@ManyToMany
+	private List<PermissionGroup> permissionGroupList;
+	
+	@OneToOne
+	private Functionality functionality;
+
+}
