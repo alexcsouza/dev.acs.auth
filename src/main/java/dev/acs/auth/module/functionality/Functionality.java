@@ -7,8 +7,12 @@ import javax.persistence.OneToOne;
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.module.Module;
 import dev.acs.auth.module.permission.Permission;
+import lombok.Data;
+import lombok.experimental.SuperBuilder;
 
+@Data
 @Entity
+@SuperBuilder
 public class Functionality extends PersistentEntity {
 
 	private static final long serialVersionUID = 2522715322138763173L;

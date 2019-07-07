@@ -7,15 +7,13 @@ import javax.persistence.ManyToMany;
 
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@EqualsAndHashCode
+@SuperBuilder
 @Entity
 public class UserGroup extends PersistentEntity {
 
@@ -23,7 +21,8 @@ public class UserGroup extends PersistentEntity {
 	private String name;
 	private String description;
 	
-	@ManyToMany
+	@ManyToMany(mappedBy = "userGroups")
+	@org.hibernate.annotations.ForeignKey(name = "none")
 	private List<User> userList;
 
 	

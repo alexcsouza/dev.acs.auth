@@ -6,15 +6,11 @@ import javax.persistence.ManyToOne;
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.client.Client;
 import dev.acs.auth.module.software.Software;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 public class Contract extends PersistentEntity{
 

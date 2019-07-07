@@ -7,15 +7,11 @@ import javax.persistence.ManyToMany;
 
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 public class Client extends PersistentEntity {
 

@@ -10,14 +10,14 @@ import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.functionality.Functionality;
 import dev.acs.auth.module.software.Software;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 public class Module extends PersistentEntity {
 
