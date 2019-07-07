@@ -18,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @Entity
+// workaround to use the keyword 'user' as table name
 @Table(name = "`user`")
 public class User extends PersistentEntity {
 
@@ -26,11 +27,11 @@ public class User extends PersistentEntity {
 	private String name;
 	
 	@ManyToMany
-	//@JoinColumn(foreignKey = @ForeignKey(value=ConstraintMode.NO_CONSTRAINT))
 	@JoinTable(name = "user_group_user",
-		joinColumns = { @JoinColumn(name = "user_id", foreignKey = @ForeignKey(value=ConstraintMode.NO_CONSTRAINT)) },
-		inverseJoinColumns = { @JoinColumn(name = "user_group_id", foreignKey = @ForeignKey(value=ConstraintMode.NO_CONSTRAINT)) })
-	@org.hibernate.annotations.ForeignKey(name = "none")
+		joinColumns = { @JoinColumn(name = "user_id") },
+		inverseJoinColumns = { @JoinColumn(name = "user_group_id") })
+	// workaround to prevent foreign key to be created
+	//@org.hibernate.annotations.ForeignKey(name = "none")
 	private List<UserGroup> userGroups;
 	
 }
