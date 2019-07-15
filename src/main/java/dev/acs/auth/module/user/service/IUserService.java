@@ -1,10 +1,18 @@
 package dev.acs.auth.module.user.service;
 
-import org.springframework.data.repository.Repository;
+import java.util.List;
 
-import dev.acs.auth.module.user.User;
+import org.springframework.stereotype.Service;
 
+import dev.acs.auth.module.user.service.dto.UserDTO;
 
-public interface IUserService extends Repository<User, Long> {
+@Service
+public interface IUserService{
+
+	public UserDTO getUser(Long id);
+
+	public List<UserDTO> getList();
+
+	public UserDTO registerUser(UserDTO userDTO);
 
 }

@@ -6,15 +6,15 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 
 import dev.acs.auth.core.persistence.PersistentEntity;
-import dev.acs.auth.module.user.User;
+import dev.acs.auth.module.user.persistence.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
 @Data
-@EqualsAndHashCode
 @SuperBuilder
 @Entity
+@EqualsAndHashCode(callSuper = false)
 public class UserGroup extends PersistentEntity {
 
 	private static final long serialVersionUID = -5033866583673683706L;
@@ -24,6 +24,5 @@ public class UserGroup extends PersistentEntity {
 	@ManyToMany(mappedBy = "userGroups")
 	@org.hibernate.annotations.ForeignKey(name = "none")
 	private List<User> userList;
-
 	
 }
