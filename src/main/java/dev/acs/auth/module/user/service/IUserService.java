@@ -11,6 +11,8 @@ public interface IUserService{
 
 	public UserDTO getUser(Long id);
 
+	public UserDTO getUser(String email);
+
 	public List<UserDTO> getList();
 
 	public UserDTO registerUser(UserDTO userDTO);
