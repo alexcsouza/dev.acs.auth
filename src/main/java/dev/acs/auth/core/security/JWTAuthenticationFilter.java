@@ -1,4 +1,4 @@
-package dev.acs.auth.core.config;
+package dev.acs.auth.core.security;
 import java.io.IOException;
 
 import javax.servlet.FilterChain;

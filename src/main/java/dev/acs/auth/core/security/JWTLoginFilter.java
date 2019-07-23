@@ -1,4 +1,4 @@
-package dev.acs.auth.core.config;
+package dev.acs.auth.core.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.acs.auth.module.login.LoginDTO;
@@ -25,7 +25,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Autowired
     private IUserService usersService;
 
-    protected JWTLoginFilter(String url, AuthenticationManager authManager) {
+    public JWTLoginFilter(String url, AuthenticationManager authManager) {
         super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authManager);
     }
@@ -44,7 +44,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
                         Collections.emptyList()
                 )
         );
-
     }
 
     @Override

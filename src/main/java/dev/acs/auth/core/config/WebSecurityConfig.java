@@ -1,6 +1,7 @@
 package dev.acs.auth.core.config;
 
-import dev.acs.auth.module.login.RestAuthenticationEntryPoint;
+import dev.acs.auth.core.security.JWTAuthenticationFilter;
+import dev.acs.auth.core.security.JWTLoginFilter;
 import dev.acs.auth.module.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +17,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -27,8 +25,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/login")
         .authenticated()
-        .antMatchers("/api/**", "/swagger-ui.html")
+        .antMatchers("/swagger-ui.html")
         .permitAll()
+                .antMatchers("/api/**")
+                .authenticated()
 //      .hasAuthority("full")
         .and()
                 // filtra requisições de login
