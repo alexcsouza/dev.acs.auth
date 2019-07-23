@@ -1,22 +1,20 @@
 package dev.acs.auth.module.user.service;
 
-import java.util.List;
-import java.util.Optional;
-
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import dev.acs.auth.module.user.persistence.IUserRepository;
+import dev.acs.auth.module.user.persistence.User;
+import dev.acs.auth.module.user.security.CustomUserDetails;
+import dev.acs.auth.module.user.service.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import dev.acs.auth.module.user.persistence.IUserRepository;
-import dev.acs.auth.module.user.persistence.User;
-import dev.acs.auth.module.user.security.CustomUserDetails;
-import dev.acs.auth.module.user.service.dto.UserDTO;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService, UserDetailsService {
@@ -28,15 +26,16 @@ public class UserService implements IUserService, UserDetailsService {
 	public UserDTO getUser(Long id) {
 		User user = userRepository.findById(id).get();
 		ObjectMapper om = new ObjectMapper();
+		om.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		UserDTO userDTO = om.convertValue(user, UserDTO.class);
 		return userDTO;
 	}
-
 
 	@Override
 	public UserDTO getUser(String email) {
 		User user = userRepository.findByEmail(email).get();
 		ObjectMapper om = new ObjectMapper();
+		om.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		UserDTO userDTO = om.convertValue(user, UserDTO.class);
 		return userDTO;
 	}
@@ -45,6 +44,7 @@ public class UserService implements IUserService, UserDetailsService {
 	public List<UserDTO> getList() {
 		List<User> list = userRepository.findAll();
 		ObjectMapper om = new ObjectMapper();
+		om.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		List<UserDTO> dtolist = om.convertValue(list, new TypeReference<List<UserDTO>>(){});
 		return dtolist;
 	}
@@ -61,6 +61,7 @@ public class UserService implements IUserService, UserDetailsService {
 		}
 
 		ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+		om.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		User user = om.convertValue(userDTO, User.class);
 		user = userRepository.save(user);
 		userDTO.setId(user.getId());

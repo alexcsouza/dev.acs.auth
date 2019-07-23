@@ -39,17 +39,16 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     public Authentication attemptAuthentication(HttpServletRequest req,
                                                 HttpServletResponse res) throws AuthenticationException {
         try {
-            
-            LoginDTO creds = new ObjectMapper()
+            LoginDTO credentials = new ObjectMapper()
                     .readValue(req.getInputStream(), LoginDTO.class);
             
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            creds.getUserName(),
-                            creds.getPassword(),
-                            new ArrayList<>())
+                            credentials.getUserName(),
+                            credentials.getPassword(),
+                            new ArrayList<>()
+                    )
             );
-            
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

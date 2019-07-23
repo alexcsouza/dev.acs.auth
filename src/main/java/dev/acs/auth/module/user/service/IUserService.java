@@ -9,12 +9,12 @@ import dev.acs.auth.module.user.service.dto.UserDTO;
 @Service
 public interface IUserService{
 
-	public UserDTO getUser(Long id);
+	UserDTO getUser(Long id);
 
-	public UserDTO getUser(String email);
+	UserDTO getUser(String email);
 
-	public List<UserDTO> getList();
+	List<UserDTO> getList();
 
-	public UserDTO registerUser(UserDTO userDTO);
+	UserDTO registerUser(UserDTO userDTO);
 
 }

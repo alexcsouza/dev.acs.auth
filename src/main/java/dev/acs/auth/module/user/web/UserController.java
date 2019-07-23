@@ -18,28 +18,28 @@ import io.swagger.annotations.ApiOperation;
 
 @RestController
 @Api(value = "User", description = "User people")
-@RequestMapping(path = { "/v1/user" })
+@RequestMapping(path = {"/api/v1/user"})
 public class UserController {
 
-  @Autowired
-  private IUserService userService;
+    @Autowired
+    private IUserService userService;
 
-  @ApiOperation(value = "Get user information")
-  @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public UserDTO get(@PathVariable(required = true) long id) {
-    return userService.getUser(id);
-  }
-  
-  @ApiOperation(value = "Get all users information")
-  @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public List<UserDTO> getList() {
-    return userService.getList();
-  }
+    @ApiOperation(value = "Get user information")
+    @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public UserDTO get(@PathVariable(required = true) long id) {
+        return userService.getUser(id);
+    }
 
-  @ApiOperation(value = "Register new user")
-  @PutMapping(value = "/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public UserDTO registerUser(@RequestBody UserDTO userDTO) {
-    return userService.registerUser(userDTO);
-  }
+    @ApiOperation(value = "Get all users information")
+    @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public List<UserDTO> getList() {
+        return userService.getList();
+    }
+
+    @ApiOperation(value = "Register new user")
+    @PutMapping(value = "/", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public UserDTO registerUser(@RequestBody UserDTO userDTO) {
+        return userService.registerUser(userDTO);
+    }
 
 }
