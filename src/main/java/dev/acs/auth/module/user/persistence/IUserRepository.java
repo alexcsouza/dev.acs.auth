@@ -13,5 +13,4 @@ public interface IUserRepository extends CrudRepository<User, Long> {
 
     @Query(value = "from User u where u.email=:email")
     Optional<User> findByEmail(@Param(value="email") String email);
-    
 }

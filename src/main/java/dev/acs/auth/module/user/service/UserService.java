@@ -3,6 +3,8 @@ package dev.acs.auth.module.user.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.acs.auth.module.login.LoginDTO;
+import dev.acs.auth.module.login.TokenAuthenticationService;
 import dev.acs.auth.module.user.persistence.IUserRepository;
 import dev.acs.auth.module.user.persistence.User;
 import dev.acs.auth.module.user.security.CustomUserDetails;
@@ -12,12 +14,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService implements IUserService, UserDetailsService {
+
+	private static final String SECRET_HASH = "ifPx;n%5BaZTR'y<2N,2$Ky?";
 
 	@Autowired
 	private IUserRepository userRepository;
@@ -68,6 +73,23 @@ public class UserService implements IUserService, UserDetailsService {
 
 		return userDTO;
 
+	}
+
+	@Override
+	public String authenticate(LoginDTO loginData) {
+		User user = userRepository.findByEmail(loginData.getUserName()).orElseThrow(()->new UsernameNotFoundException());
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append(user.getName())
+				.append(user.getPassword())
+				.append(SECRET_HASH);
+		byte[] genPass = DigestUtils.md5Digest(stringBuilder.toString().getBytes());
+		byte[] logPass = loginData.getPassword().getBytes();
+
+		if(genPass.equals(logPass)){
+			TokenAuthenticationService.
+		}
+
+		return null;
 	}
 
 	@Override

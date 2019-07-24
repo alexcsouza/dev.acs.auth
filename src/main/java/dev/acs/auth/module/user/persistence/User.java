@@ -29,7 +29,9 @@ public class User extends PersistentEntity {
 	private String name;
 
 	private String email;
-	
+
+	private String password;
+
 	@ManyToMany
 	@JoinTable(name = "user_group_user",
 		joinColumns = { @JoinColumn(name = "user_id") },
