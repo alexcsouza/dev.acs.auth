@@ -1,19 +1,14 @@
 package dev.acs.auth.module.user.persistence;
 
-import java.util.List;
-
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.usergroup.UserGroup;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @SuperBuilder
