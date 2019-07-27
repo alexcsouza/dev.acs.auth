@@ -10,20 +10,17 @@ import dev.acs.auth.module.user.persistence.User;
 import dev.acs.auth.module.user.security.CustomUserDetails;
 import dev.acs.auth.module.user.service.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.util.DigestUtils;
 
-import java.util.Collection;
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements IUserService, UserDetailsService {
-
-	private static final String SECRET_HASH = "ifPx;n%5BaZTR'y<2N,2$Ky?";
 
 	@Autowired
 	private IUserRepository userRepository;
@@ -33,20 +30,26 @@ public class UserService implements IUserService, UserDetailsService {
 
 	@Override
 	public UserDTO getUser(Long id) {
-		User user = userRepository.findById(id).get();
+		Optional<User> userOptional = userRepository.findById(id);
+		if(!userOptional.isPresent()){
+			throw new EntityNotFoundException();
+		}
+		User user = userOptional.get();
 		ObjectMapper om = new ObjectMapper();
 		om.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		UserDTO userDTO = om.convertValue(user, UserDTO.class);
-		return userDTO;
+		return om.convertValue(user, UserDTO.class);
 	}
 
 	@Override
 	public UserDTO getUser(String email) {
-		User user = userRepository.findByEmail(email).get();
+		Optional<User> userOptional = userRepository.findByEmail(email);
+		if(!userOptional.isPresent()){
+			throw new EntityNotFoundException();
+		}
+		User user = userOptional.get();
 		ObjectMapper om = new ObjectMapper();
 		om.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		UserDTO userDTO = om.convertValue(user, UserDTO.class);
-		return userDTO;
+		return om.convertValue(user, UserDTO.class);
 	}
 
 	@Override
@@ -54,8 +57,7 @@ public class UserService implements IUserService, UserDetailsService {
 		List<User> list = userRepository.findAll();
 		ObjectMapper om = new ObjectMapper();
 		om.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		List<UserDTO> dtolist = om.convertValue(list, new TypeReference<List<UserDTO>>(){});
-		return dtolist;
+		return om.convertValue(list, new TypeReference<List<UserDTO>>(){});
 	}
 
 	@Override
@@ -81,23 +83,34 @@ public class UserService implements IUserService, UserDetailsService {
 
 	@Override
 	public String authenticate(LoginDTO loginData) {
+
+		/**
+		 *
+		 * TODO: Make token use salt and hashed password storage
+		 *
+		 *
+
 		User user = userRepository.findByEmail(loginData.getUserName()).orElseThrow(()->new UsernameNotFoundException(""));
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append(user.getName())
+		StringBuilder stringBuilder = new StringBuilder().append(user.getName())
 				.append(user.getPassword())
 				.append(SECRET_HASH);
+
 		byte[] genPass = DigestUtils.md5Digest(stringBuilder.toString().getBytes());
 		byte[] logPass = loginData.getPassword().getBytes();
+
 		if(genPass == logPass){
 			jwtTokenUtil.generateToken(CustomUserDetails.builder().user(user).build());
 		}
-		String token = jwtTokenUtil.generateToken(loadUserByUsername(loginData.getUserName()));
-		return token;
+
+		*/
+		return jwtTokenUtil.generateToken(loadUserByUsername(loginData.getUserName()));
+
 	}
 
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+	public UserDetails loadUserByUsername(String email){
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(""));
-		UserDetails userDetails = new CustomUserDetails();
+		return CustomUserDetails.builder().user(user).build();
 	}
+
 }
