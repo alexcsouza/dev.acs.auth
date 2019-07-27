@@ -17,7 +17,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@Api(value = "User", description = "User people")
+@Api(value = "User", tags = "User")
 @RequestMapping(path = {"/api/v1/user"})
 public class UserController {
 

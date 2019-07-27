@@ -1,24 +1,25 @@
 package dev.acs.auth.module.module;
 
-import java.util.List;
+import dev.acs.auth.core.persistence.PersistentEntity;
+import dev.acs.auth.module.app.App;
+import dev.acs.auth.module.feature.Feature;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import dev.acs.auth.core.persistence.PersistentEntity;
-import dev.acs.auth.module.functionality.Functionality;
-import dev.acs.auth.module.software.Software;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
 @Entity
+@EqualsAndHashCode(callSuper = true)
 public class Module extends PersistentEntity {
 
 	private static final long serialVersionUID = 6795962897526642148L;
@@ -28,9 +29,9 @@ public class Module extends PersistentEntity {
 	private String label;
 
 	@OneToMany
-	private List<Functionality> functionalityList;
+	private List<Feature> featureList;
 	
 	@ManyToOne
-	private Software software;
+	private App app;
 
 }

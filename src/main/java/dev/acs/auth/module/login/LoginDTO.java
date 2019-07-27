@@ -1,16 +1,13 @@
 package dev.acs.auth.module.login;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class LoginDTO{
-    
+@NoArgsConstructor
+@Builder
+public class LoginDTO {
     private String userName;
     private String password;
 }

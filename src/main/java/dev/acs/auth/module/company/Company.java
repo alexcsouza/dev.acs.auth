@@ -1,4 +1,4 @@
-package dev.acs.auth.module.client;
+package dev.acs.auth.module.company;
 
 import java.util.List;
 
@@ -15,11 +15,13 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @Entity
 @EqualsAndHashCode(callSuper = false)
-public class Client extends PersistentEntity {
+public class Company extends PersistentEntity {
 
 	private static final long serialVersionUID = -1132020693411357129L;
 	
 	private String name;
+
+	private String site;
 
 	@ManyToMany
 	private List<User> userList;

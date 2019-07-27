@@ -7,7 +7,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 
 import dev.acs.auth.core.persistence.PersistentEntity;
-import dev.acs.auth.module.functionality.Functionality;
+import dev.acs.auth.module.feature.Feature;
 import dev.acs.auth.module.permissiongroup.PermissionGroup;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,6 +31,6 @@ public class Permission extends PersistentEntity {
 	private List<PermissionGroup> permissionGroupList;
 	
 	@OneToOne
-	private Functionality functionality;
+	private Feature feature;
 
 }

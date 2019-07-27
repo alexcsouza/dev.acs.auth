@@ -1,4 +1,4 @@
-package dev.acs.auth.module.login;
+package dev.acs.auth.core.security;
 
 public class ExpiredJWTException extends Exception {
     public ExpiredJWTException() {

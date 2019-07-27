@@ -1,7 +1,7 @@
 package dev.acs.auth.core.config;
 
-import dev.acs.auth.module.login.JWTAuthenticationEntryPoint;
-import dev.acs.auth.module.login.JWTRequestFilter;
+import dev.acs.auth.core.security.JWTAuthenticationEntryPoint;
+import dev.acs.auth.core.security.JWTRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
