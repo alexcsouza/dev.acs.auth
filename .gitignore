@@ -82,9 +82,6 @@ local.properties
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
 # Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
-# User-specific stuff
-/.idea/**/*
-
 ### Java ###
 # Compiled class file
 *.class
@@ -123,7 +120,10 @@ buildNumber.properties
 .mvn/wrapper/maven-wrapper.jar
 
 ### VisualStudioCode ###
-/.vscode/**/
+*/.vscode/**/*
+
+# User-specific stuff
+*/.idea/**/*
 
 ### VisualStudioCode Patch ###
 # Ignore all local history of files
