@@ -117,6 +117,8 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 /.mvn/**/*
+mvnw
+mvnw.cmd
 
 ### VisualStudioCode ###
 /.vscode/**/*
