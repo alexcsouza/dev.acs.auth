@@ -112,8 +112,8 @@ public class UserService implements IUserService, UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email){
-		User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(""));
-		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format("No user identifyied by %s", email)));
+		user.setPassword(new BCryptPasswordEncoder(16).encode(user.getPassword()));
 		return CustomUserDetails.builder().user(user).build();
 	}
 

@@ -26,21 +26,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier("UserService")
     private UserDetailsService jwtUserDetailsService;
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth
-//                .userDetailsService(jwtUserDetailsService).passwordEncoder(new BCryptPasswordEncoder());
-//    }
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        // cria uma conta default
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-        auth.inMemoryAuthentication()
-                .withUser("admin")
-                .password(encoder.encode("password"))
-                .roles("ADMIN");
+        auth
+                .userDetailsService(jwtUserDetailsService).passwordEncoder(new BCryptPasswordEncoder(16));
     }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        // cria uma conta default
+//        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//        auth.inMemoryAuthentication()
+//                .withUser("admin")
+//                .password(encoder.encode("password"))
+//                .roles("ADMIN");
+//    }
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
