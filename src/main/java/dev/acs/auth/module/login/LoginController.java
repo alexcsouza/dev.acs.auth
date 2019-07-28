@@ -17,6 +17,7 @@ public class LoginController {
     @ApiOperation(value = "Get user information")
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<String> get(@RequestBody LoginDTO loginDTO) {
+        return null;
     }
 }
 
