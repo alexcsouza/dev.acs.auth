@@ -8,6 +8,7 @@ import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.AlternateTypeRule;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Parameter;
@@ -34,23 +35,25 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
   @Bean
   public Docket api() {
     //Adding Header
-    ParameterBuilder aParameterBuilder = new ParameterBuilder();
-    aParameterBuilder.name("Authorization")                 // name of header
-            .modelRef(new ModelRef("string"))
-            .parameterType("header")               // type - header
-            .defaultValue("Basic em9uZTpteXBhc3N3b3Jk")        // based64 of - zone:mypassword
-            .required(true)                // for compulsory
-            .build();
-    java.util.List<Parameter> aParameters = new ArrayList<>();
-    aParameters.add(aParameterBuilder.build());             // add parameter
+//    ParameterBuilder aParameterBuilder = new ParameterBuilder();
+//    aParameterBuilder.name("Authorization")                 // name of header
+//            .modelRef(new ModelRef("string"))
+//            .parameterType("header")
+//            //.defaultValue("Basic em9uZTpteXBhc3N3b3Jk")        // based64 of - zone:mypassword
+//            .required(true)                // for compulsory
+//            .build();
+//    java.util.List<Parameter> aParameters = new ArrayList<>();
+//    aParameters.add(aParameterBuilder.build());             // add parameter
     return new Docket(DocumentationType.SWAGGER_2)
             .select()
             .apis(RequestHandlerSelectors.basePackage("dev.acs"))
-            .paths(PathSelectors.regex("/.*"))
+            .paths(PathSelectors.ant("/**"))
             .build()
             .apiInfo(metaData())
-            .pathMapping("/api/**")
-            .globalOperationParameters(aParameters);
+
+            //.pathMapping("/api/**")
+//            .globalOperationParameters(aParameters)
+            ;
   }
 
   private ApiInfo metaData() {

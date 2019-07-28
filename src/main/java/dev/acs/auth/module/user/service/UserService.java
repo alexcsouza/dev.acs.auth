@@ -3,16 +3,18 @@ package dev.acs.auth.module.user.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.acs.auth.core.security.JWTTokenUtil;
 import dev.acs.auth.module.login.LoginDTO;
+import dev.acs.auth.module.login.TokenAuthenticationService;
 import dev.acs.auth.module.user.persistence.IUserRepository;
 import dev.acs.auth.module.user.persistence.User;
 import dev.acs.auth.module.user.security.CustomUserDetails;
 import dev.acs.auth.module.user.service.dto.UserDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -20,13 +22,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Qualifier("UserService")
 public class UserService implements IUserService, UserDetailsService {
 
 	@Autowired
 	private IUserRepository userRepository;
 
-	@Autowired
-	private JWTTokenUtil jwtTokenUtil;
+//	@Autowired
+//	private JWTTokenUtil jwtTokenUtil;
 
 	@Override
 	public UserDTO getUser(Long id) {
@@ -103,13 +106,14 @@ public class UserService implements IUserService, UserDetailsService {
 		}
 
 		*/
-		return jwtTokenUtil.generateToken(loadUserByUsername(loginData.getUserName()));
+		return TokenAuthenticationService.addAuthentication(loadUserByUsername(loginData.getUsername()));
 
 	}
 
 	@Override
 	public UserDetails loadUserByUsername(String email){
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(""));
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		return CustomUserDetails.builder().user(user).build();
 	}
 

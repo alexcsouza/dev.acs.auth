@@ -1,9 +1,11 @@
 package dev.acs.auth.module.user.persistence;
 
 import dev.acs.auth.core.persistence.PersistentEntity;
+import dev.acs.auth.module.profile.persistence.Profile;
 import dev.acs.auth.module.usergroup.UserGroup;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
@@ -15,6 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@EqualsAndHashCode(callSuper = false)
 // workaround to use the keyword 'user' as table name
 @Table(name = "`user`")
 public class User extends PersistentEntity {
@@ -26,6 +29,8 @@ public class User extends PersistentEntity {
 	private String email;
 
 	private String password;
+
+	private Profile profile;
 
 	@ManyToMany
 	@JoinTable(name = "user_group_user",

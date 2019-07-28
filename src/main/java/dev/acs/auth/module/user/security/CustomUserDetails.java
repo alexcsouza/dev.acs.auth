@@ -1,6 +1,7 @@
 package dev.acs.auth.module.user.security;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,12 +24,12 @@ public class CustomUserDetails implements UserDetails{
 
     @Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return Collections.EMPTY_SET;
 	}
 
 	@Override
 	public String getPassword() {
-		return null;
+		return user.getPassword();
 	}
 
 	@Override
