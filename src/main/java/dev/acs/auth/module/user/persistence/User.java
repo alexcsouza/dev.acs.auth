@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 // workaround to use the keyword 'user' as table name
 @Table(name = "`user`")
+@Audited
 public class User extends PersistentEntity {
 
 	private static final long serialVersionUID = 1765930670583830015L;

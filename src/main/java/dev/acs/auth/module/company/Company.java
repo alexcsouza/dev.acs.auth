@@ -10,11 +10,13 @@ import dev.acs.auth.module.user.persistence.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.envers.Audited;
 
 @Data
 @SuperBuilder
 @Entity
 @EqualsAndHashCode(callSuper = false)
+@Audited
 public class Company extends PersistentEntity {
 
 	private static final long serialVersionUID = -1132020693411357129L;

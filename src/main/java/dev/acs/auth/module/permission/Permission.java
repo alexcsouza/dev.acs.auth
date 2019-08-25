@@ -11,14 +11,18 @@ import dev.acs.auth.module.feature.Feature;
 import dev.acs.auth.module.permissiongroup.PermissionGroup;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.envers.Audited;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @SuperBuilder
 @Entity
+@EqualsAndHashCode(callSuper = false)
+@Audited
 public class Permission extends PersistentEntity {
 
 	private static final long serialVersionUID = -6708078788530807565L;

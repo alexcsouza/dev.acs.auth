@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -18,6 +19,7 @@ import javax.persistence.ManyToOne;
 @SuperBuilder
 @Entity
 @EqualsAndHashCode(callSuper = false)
+@Audited
 public class Contract extends PersistentEntity{
 
 	private static final long serialVersionUID = 276185490264488580L;

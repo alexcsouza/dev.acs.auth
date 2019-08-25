@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.envers.Audited;
 
 @Data
 @AllArgsConstructor
@@ -19,6 +20,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 @Entity
+@Audited
 public class Feature extends PersistentEntity {
 
 	private static final long serialVersionUID = 2522715322138763173L;

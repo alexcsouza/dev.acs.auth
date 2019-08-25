@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 
@@ -16,6 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = false)
+@Audited
 public class Profile extends PersistentEntity {
 
     private static final long serialVersionUID = 1765930670583830015L;
