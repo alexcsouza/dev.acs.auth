@@ -1,14 +1,10 @@
 package dev.acs.auth.module.user.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.acs.auth.module.login.LoginDTO;
-import dev.acs.auth.module.login.TokenAuthenticationService;
-import dev.acs.auth.module.user.persistence.IUserRepository;
-import dev.acs.auth.module.user.persistence.User;
-import dev.acs.auth.module.user.security.CustomUserDetails;
-import dev.acs.auth.module.user.service.dto.UserDTO;
+import java.util.List;
+import java.util.Optional;
+
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,12 +13,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
-import java.util.List;
-import java.util.Optional;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import dev.acs.auth.module.login.LoginDTO;
+import dev.acs.auth.module.login.TokenAuthenticationService;
+import dev.acs.auth.module.user.persistence.IUserRepository;
+import dev.acs.auth.module.user.persistence.User;
+import dev.acs.auth.module.user.security.CustomUserDetails;
+import dev.acs.auth.module.user.service.dto.UserDTO;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Qualifier("UserService")
+@Slf4j
 public class UserService implements IUserService, UserDetailsService {
 
 	@Autowired
@@ -112,9 +117,9 @@ public class UserService implements IUserService, UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email){
-		User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format("No user identifyied by %s", email)));
-		user.setPassword(new BCryptPasswordEncoder(16).encode(user.getPassword()));
-		return CustomUserDetails.builder().user(user).build();
+			User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format("No user identifyied by %s", email)));
+			user.setPassword(new BCryptPasswordEncoder(16).encode(user.getPassword()));
+			return CustomUserDetails.builder().user(user).build();
 	}
 
 }

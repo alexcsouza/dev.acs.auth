@@ -3,6 +3,8 @@ package dev.acs.auth.core.security;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.acs.auth.module.login.LoginDTO;
 import dev.acs.auth.module.login.TokenAuthenticationService;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
+@Slf4j
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     public JWTLoginFilter(String url, AuthenticationManager authManager) {
@@ -26,8 +29,8 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-            throws AuthenticationException, IOException, ServletException {
-
+            throws IOException, ServletException {
+//try {
         LoginDTO credentials = new ObjectMapper()
                 .readValue(request.getInputStream(), LoginDTO.class);
 
@@ -38,6 +41,10 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
                         Collections.emptyList()
                 )
         );
+//}catch(AuthenticationException e) {
+//	log.warn(e.getMessage());	
+//}
+//		return null;
     }
 
     @Override
