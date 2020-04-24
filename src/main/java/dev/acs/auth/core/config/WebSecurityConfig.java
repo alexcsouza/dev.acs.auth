@@ -1,7 +1,5 @@
 package dev.acs.auth.core.config;
 
-import dev.acs.auth.core.security.JWTAuthenticationFilter;
-import dev.acs.auth.core.security.JWTLoginFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +11,11 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import dev.acs.auth.core.security.JWTAuthenticationFilter;
+import dev.acs.auth.core.security.JWTLoginFilter;
+import dev.acs.auth.module.login.TokenAuthenticationService;
 
 @Configuration
 @EnableWebSecurity
@@ -26,6 +26,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier("UserService")
     private UserDetailsService jwtUserDetailsService;
 
+    @Autowired
+	private TokenAuthenticationService tokenAuthenticationService;
+    
+    @Autowired
+	private JWTAuthenticationFilter jwtAuthenticationFilter;
+    
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
@@ -63,11 +69,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
 
                 // filtra requisições de login
-                .addFilterBefore(new JWTLoginFilter("/login", authenticationManager()),
+                .addFilterBefore(new JWTLoginFilter("/login", authenticationManager(), tokenAuthenticationService),
                         UsernamePasswordAuthenticationFilter.class)
 
                 // filtra outras requisições para verificar a presença do JWT no header
-                .addFilterBefore(new JWTAuthenticationFilter(),
+                .addFilterBefore(jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class);
 
     }
