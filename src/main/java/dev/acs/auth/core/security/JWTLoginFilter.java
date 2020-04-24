@@ -1,36 +1,39 @@
 package dev.acs.auth.core.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import dev.acs.auth.module.login.LoginDTO;
-import dev.acs.auth.module.login.TokenAuthenticationService;
-import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import java.io.IOException;
+import java.util.Collections;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Collections;
 
-@Slf4j
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import dev.acs.auth.module.login.LoginDTO;
+import dev.acs.auth.module.login.TokenAuthenticationService;
+
+
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
 
-    public JWTLoginFilter(String url, AuthenticationManager authManager) {
+	
+	private TokenAuthenticationService tokenAuthenticationService;
+	
+    public JWTLoginFilter(String url, AuthenticationManager authManager, TokenAuthenticationService tokenAuthenticationService) {
         super(new AntPathRequestMatcher(url));
         setAuthenticationManager(authManager);
+        this.tokenAuthenticationService = tokenAuthenticationService;
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
-//try {
+            throws IOException {
         LoginDTO credentials = new ObjectMapper()
                 .readValue(request.getInputStream(), LoginDTO.class);
 
@@ -41,10 +44,6 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
                         Collections.emptyList()
                 )
         );
-//}catch(AuthenticationException e) {
-//	log.warn(e.getMessage());	
-//}
-//		return null;
     }
 
     @Override
@@ -54,7 +53,7 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
             FilterChain filterChain,
             Authentication auth) throws IOException, ServletException {
 
-        TokenAuthenticationService.addAuthentication(response, auth.getName());
+        tokenAuthenticationService.addAuthentication(response, auth.getName());
     }
 
 }

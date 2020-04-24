@@ -23,19 +23,27 @@ import dev.acs.auth.module.user.persistence.IUserRepository;
 import dev.acs.auth.module.user.persistence.User;
 import dev.acs.auth.module.user.security.CustomUserDetails;
 import dev.acs.auth.module.user.service.dto.UserDTO;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Qualifier("UserService")
-@Slf4j
+//@Slf4j
 public class UserService implements IUserService, UserDetailsService {
 
 	@Autowired
 	private IUserRepository userRepository;
 
+	@Autowired
+	private TokenAuthenticationService tokenAuthenticationService;
+	
 //	@Autowired
 //	private JWTTokenUtil jwtTokenUtil;
 
+
+	public UserService(IUserRepository userRepository) {
+		super();
+		this.userRepository = userRepository;
+	}
+	
 	@Override
 	public UserDTO getUser(Long id) {
 		Optional<User> userOptional = userRepository.findById(id);
@@ -111,7 +119,7 @@ public class UserService implements IUserService, UserDetailsService {
 		}
 
 		*/
-		return TokenAuthenticationService.addAuthentication(loadUserByUsername(loginData.getUsername()));
+		return tokenAuthenticationService.addAuthentication(loadUserByUsername(loginData.getUsername()));
 
 	}
 
