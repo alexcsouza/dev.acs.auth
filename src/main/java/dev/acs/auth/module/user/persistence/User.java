@@ -1,24 +1,27 @@
 package dev.acs.auth.module.user.persistence;
 
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
+import org.hibernate.envers.Audited;
+
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.profile.persistence.Profile;
 import dev.acs.auth.module.usergroup.UserGroup;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.envers.Audited;
-
-import javax.persistence.*;
-import java.util.List;
 
 @Data
 @SuperBuilder
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @EqualsAndHashCode(callSuper = false)
+
 // workaround to use the keyword 'user' as table name
 @Table(name = "`user`")
 @Audited

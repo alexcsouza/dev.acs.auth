@@ -119,7 +119,9 @@ public class UserService implements IUserService, UserDetailsService {
 		}
 
 		*/
-		return tokenAuthenticationService.addAuthentication(loadUserByUsername(loginData.getUsername()));
+		return tokenAuthenticationService.addAuthentication(
+				loadUserByUsername(loginData.getUsername())
+			);
 
 	}
 

@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiOperation;
 public class LoginController {
 
     @ApiOperation(value = "Login")
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public void login(@RequestBody LoginDTO loginDTO){
     	throw new NotImplementedException("Not implemented because spring-boot intercepts login process");
     }
