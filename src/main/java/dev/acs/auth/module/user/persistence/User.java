@@ -17,14 +17,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 
+//workaround to use the keyword 'user' as table name
+@Table(name = "`user`")
+@Audited
 @Data
 @SuperBuilder
 @Entity
-@EqualsAndHashCode(callSuper = false)
-
-// workaround to use the keyword 'user' as table name
-@Table(name = "`user`")
-@Audited
+@EqualsAndHashCode(callSuper = true)
 public class User extends PersistentEntity {
 
 	private static final long serialVersionUID = 1765930670583830015L;

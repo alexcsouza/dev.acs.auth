@@ -1,4 +1,4 @@
-package dev.acs.auth.module;
+package dev.acs.auth.module.login;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -22,7 +22,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import dev.acs.auth.module.login.TokenAuthenticationService;
 import dev.acs.auth.module.user.persistence.User;
 import dev.acs.auth.module.user.security.CustomUserDetails;
 import io.jsonwebtoken.Jwts;
@@ -109,7 +108,6 @@ public class TokenAuthenticationServiceTest {
     	assertThat(auth.getName())
     		.withFailMessage("Auth name not present in token on request header: %s", userExpected)
     		.isEqualTo(userExpected);
-
     	
     }
 	

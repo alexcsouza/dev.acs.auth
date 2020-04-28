@@ -1,10 +1,12 @@
 package dev.acs.auth.module.user.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +28,6 @@ import dev.acs.auth.module.user.service.dto.UserDTO;
 
 @Service
 @Qualifier("UserService")
-//@Slf4j
 public class UserService implements IUserService, UserDetailsService {
 
 	@Autowired
@@ -39,8 +40,9 @@ public class UserService implements IUserService, UserDetailsService {
 //	private JWTTokenUtil jwtTokenUtil;
 
 
-	public UserService(IUserRepository userRepository) {
+	public UserService(IUserRepository userRepository, TokenAuthenticationService tokenAuthService) {
 		super();
+		this.tokenAuthenticationService = tokenAuthService;
 		this.userRepository = userRepository;
 	}
 	
@@ -86,15 +88,43 @@ public class UserService implements IUserService, UserDetailsService {
 		if(userRepository.findByEmail(userDTO.getEmail()).isPresent()){
 			throw new IllegalArgumentException("User already registered");
 		}
+		
+		validatePassword(userDTO.getPassword());
 
 		ObjectMapper om = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 		om.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 		User user = om.convertValue(userDTO, User.class);
+		user.setPassword(encodePassord(user));
 		user = userRepository.save(user);
 		userDTO.setId(user.getId());
 
 		return userDTO;
 
+	}
+	
+	private String encodePassord(User user) {
+		return new BCryptPasswordEncoder(16).encode(user.getPassword());
+	}
+
+	private void validatePassword(String password) {
+		List<String> errors = new ArrayList<>();
+		
+		if(password.length() < 8) {
+			errors.add("Password must be greater then 8 characters.");
+		}
+		
+		if(password.toUpperCase().equals(password) || password.toLowerCase().equals(password) ) {
+			errors.add("Password shoud have bouth, upper and lower case characters.");
+		}
+		
+		if(!password.matches("/\\W/g")) {
+			errors.add("Password shoud have at least one special character.");
+		}
+		
+		if(!errors.isEmpty()) {
+			throw new IllegalArgumentException(String.format("Invalid format for passord: %s", StringUtils.join(errors, "\n - ")));
+		}
+		
 	}
 
 	@Override
@@ -127,9 +157,11 @@ public class UserService implements IUserService, UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email){
-			User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format("No user identifyied by %s", email)));
-			user.setPassword(new BCryptPasswordEncoder(16).encode(user.getPassword()));
-			return CustomUserDetails.builder().user(user).build();
+		User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format("No user identifyied by %s", email)));
+		user.setPassword(encodePassord(user));
+		return CustomUserDetails.builder().user(user).build();
 	}
+
+	
 
 }
