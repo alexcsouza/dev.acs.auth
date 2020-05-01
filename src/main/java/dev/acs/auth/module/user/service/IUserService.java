@@ -2,6 +2,8 @@ package dev.acs.auth.module.user.service;
 
 import java.util.List;
 
+import javax.security.sasl.AuthenticationException;
+
 import org.springframework.stereotype.Service;
 
 import dev.acs.auth.module.login.LoginDTO;
@@ -18,5 +20,5 @@ public interface IUserService{
 
 	UserDTO registerUser(UserDTO userDTO);
 
-    String authenticate(LoginDTO userName);
+    String authenticate(LoginDTO userName) throws AuthenticationException;
 }

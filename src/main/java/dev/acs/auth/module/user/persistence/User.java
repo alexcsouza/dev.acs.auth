@@ -13,8 +13,10 @@ import org.hibernate.envers.Audited;
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.profile.persistence.Profile;
 import dev.acs.auth.module.usergroup.UserGroup;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 //workaround to use the keyword 'user' as table name
@@ -23,6 +25,8 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class User extends PersistentEntity {
 

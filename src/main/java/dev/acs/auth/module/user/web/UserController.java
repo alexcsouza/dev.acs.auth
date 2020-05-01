@@ -2,7 +2,6 @@ package dev.acs.auth.module.user.web;
 
 import java.util.List;
 
-import io.swagger.annotations.ApiImplicitParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.acs.auth.module.user.service.IUserService;
 import dev.acs.auth.module.user.service.dto.UserDTO;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
