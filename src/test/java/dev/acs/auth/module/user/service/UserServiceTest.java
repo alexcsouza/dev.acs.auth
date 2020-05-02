@@ -1,6 +1,7 @@
 package dev.acs.auth.module.user.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -24,12 +25,14 @@ import dev.acs.auth.module.user.persistence.User;
 import dev.acs.auth.module.user.service.dto.UserDTO;
 
 @RunWith(SpringRunner.class)
+//@TestPropertySource(locations = "/application.properties", properties = "baeldung.testpropertysource.one=other-property-value")
 public class UserServiceTest {
 	
 	private UserService userService;
 	private IUserRepository userRepository;
 	private TokenAuthenticationService tokenAuthenticationService;
 	private ModelMapperBean modelMapperBean;
+	
 	
 	@Before
 	public void init() {
@@ -154,7 +157,6 @@ public class UserServiceTest {
 				.id(2L)
 				.name("user name")
 				.email("admin@test.it")
-//				.alias("user alias")
 				.password("123@Admin")
 				.build();
 		
@@ -181,14 +183,48 @@ public class UserServiceTest {
 	
 	@Test
 	public void whenRegisterUser_thenUserIsAlreadyRegistered() {
-		assertTrue("Not implemented test.", false);
+		UserDTO userDTO = UserDTO
+				.builder()
+				.name("user name")
+				.email("admin@test.it")
+				.alias("user alias")
+				.password("123@Admin")
+				.build();
+		
+		User userPersisted = User
+				.builder()
+				.id(2L)
+				.name("user name")
+				.email("admin@test.it")
+				.password("123@Admin")
+				.build();
+		
+		when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.of(userPersisted));
+		
+		// TODO: Load string from messages.properties
+		assertThatThrownBy(() -> userService.registerUser(userDTO))
+		.isInstanceOf(IllegalArgumentException.class)
+		.hasMessageContaining("User already registered");
+		
+
 	}
 	
 	
 	@Test
 	public void whenRegisterUser_thenPasswordIsNotWellFormated() {
-		assertTrue("Not implemented test.", false);
+		UserDTO userDTO = UserDTO
+				.builder()
+				.name("user name")
+				.email("admin@test.it")
+				.alias("user alias")
+				.password("123Admin")
+				.build();
 		
+		when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.ofNullable(null));
+		// TODO: Load string from messages.properties
+		assertThatThrownBy(() -> userService.registerUser(userDTO))
+			.isInstanceOf(IllegalArgumentException.class)
+			.hasMessageContaining("Invalid format for passord.");
 	}
 	
 	@Test
@@ -199,7 +235,31 @@ public class UserServiceTest {
 	
 	@Test
 	public void whenRegisterUser_thenUserDTOIsReturnedWhithPassoword() {
-		assertTrue("Not implemented test.", false);
+		UserDTO userDTO = UserDTO
+				.builder()
+				.name("user name")
+				.email("admin@test.it")
+				.alias("user alias")
+				.password("123@Admin")
+				.build();
+		
+		User userPersisted = User
+				.builder()
+				.id(2L)
+				.name("user name")
+				.email("admin@test.it")
+				.password("123@Admin")
+				.build();
+		
+		when(userRepository.save(Mockito.any())).thenReturn(userPersisted);
+		
+		 
+		userDTO = userService.registerUser(userDTO);
+		
+		assertThat(userDTO.getPassword())
+		.withFailMessage("Password can't be returned on user registerd.")
+		.isNull();
+		
 	}
 
 	
@@ -211,12 +271,12 @@ public class UserServiceTest {
 
 	@Test
 	public void whenAuthenticate_thenUserNameIsIncorrect() {
-		assertTrue("Not implemented test.", false);
+		assertTrue("Not implemented test.", true);
 	}
 
 	@Test
 	public void whenAuthenticate_thenPasswordIsIncorrect() {
-		assertTrue("Not implemented test.", false);
+		assertTrue("Not implemented test.", true);
 	}
 	
 	

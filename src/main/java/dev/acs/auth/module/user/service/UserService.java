@@ -94,10 +94,12 @@ public class UserService implements IUserService, UserDetailsService {
 	public UserDTO registerUser(UserDTO userDTO) {
 
 		if(userDTO.getId() != null){
+			// TODO: Load string from messages.properties
 			throw new IllegalArgumentException("User already registered");
 		}
 
 		if(userRepository.findByEmail(userDTO.getEmail()).isPresent()){
+			// TODO: Load string from messages.properties
 			throw new IllegalArgumentException("User already registered");
 		}
 		
@@ -126,6 +128,7 @@ public class UserService implements IUserService, UserDetailsService {
 				.collect(Collectors.toList());
 				
 		if(!fail.isEmpty()) {
+			// TODO: Load string from messages.properties
 			throw new IllegalArgumentException("Invalid format for passord.");
 		}
 		
@@ -138,6 +141,7 @@ public class UserService implements IUserService, UserDetailsService {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();  
 		boolean valid = encoder.matches(loginData.getPassword(), userDetails.getPassword());
 		if(!valid) {
+			// TODO: Load string from messages.properties
 			throw new AuthenticationException("Invalid username or password");
 		}
 		return tokenAuthenticationService.addAuthentication(userDetails);
@@ -146,6 +150,7 @@ public class UserService implements IUserService, UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String email){
+		// TODO: Load string from messages.properties
 		User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format("No user identifyied by %s", email)));
 		//user.setPassword(encodePassord(user));
 		return CustomUserDetails.builder().user(user).build();
