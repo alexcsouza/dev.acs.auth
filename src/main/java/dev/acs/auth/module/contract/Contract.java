@@ -1,5 +1,10 @@
 package dev.acs.auth.module.contract;
 
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+
+import org.hibernate.envers.Audited;
+
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.app.App;
 import dev.acs.auth.module.company.Company;
@@ -8,10 +13,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.envers.Audited;
-
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
 
 @Data
 @NoArgsConstructor

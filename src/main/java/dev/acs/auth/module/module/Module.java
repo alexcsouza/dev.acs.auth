@@ -1,5 +1,13 @@
 package dev.acs.auth.module.module;
 
+import java.util.List;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+
+import org.hibernate.envers.Audited;
+
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.app.App;
 import dev.acs.auth.module.feature.Feature;
@@ -8,12 +16,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.envers.Audited;
-
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

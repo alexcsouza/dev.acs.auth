@@ -18,12 +18,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 @Service
 public class TokenAuthenticationService {
 
-    // expirationTime = 10 dias
-//    static final long expirationTime = 860_000_000;
-//    static final String secret = "Mysecret";
-//    static final String prefix = "Bearer";
-//    static final String headerString = "Authorization";
-
     @Value("${auth.jwt.token.validity}")
     private String expirationTime;
 
@@ -36,9 +30,6 @@ public class TokenAuthenticationService {
     @Value("${auth.jwt.token.header-string}")
     private String headerString;
     
-    
-    
-    
     public String addAuthentication(UserDetails user) {
         return Jwts.builder()
                 .setSubject(user.getUsername())
@@ -48,14 +39,14 @@ public class TokenAuthenticationService {
 
     }
 
-    public void addAuthentication(HttpServletResponse response, String username) {
-        String JWT = Jwts.builder()
+    public HttpServletResponse addAuthentication(HttpServletResponse response, String username) {
+        String jwt = Jwts.builder()
                 .setSubject(username)
                 .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(expirationTime)))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
-
-        response.addHeader(headerString, prefix + " " + JWT);
+        response.addHeader(headerString, prefix + jwt);
+        return response;
     }
 
     public Authentication getAuthentication(HttpServletRequest request) {
@@ -65,7 +56,7 @@ public class TokenAuthenticationService {
             // faz parse do token
             String user = Jwts.parser()
                     .setSigningKey(secret)
-                    .parseClaimsJws(token.replace(prefix, ""))
+                    .parseClaimsJws(token.replace(prefix, "").trim())
                     .getBody()
                     .getSubject();
 
@@ -76,4 +67,6 @@ public class TokenAuthenticationService {
         return null;
     }
 
+    
+    
 }

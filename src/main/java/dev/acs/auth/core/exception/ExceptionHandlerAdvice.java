@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@ControllerAdvice
+import io.jsonwebtoken.ExpiredJwtException;
+
+@ControllerAdvice(basePackageClasses = Throwable.class)
 public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler{
 //	
 	@ExceptionHandler(value 
@@ -32,6 +34,14 @@ public class ExceptionHandlerAdvice extends ResponseEntityExceptionHandler{
 	
 	@ExceptionHandler(UsernameNotFoundException.class)
 	public ResponseEntity<Object> handleException(UsernameNotFoundException ex){
+		ResponseEntity<Object> response = new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
+		return response;
+	}	
+	
+	
+	
+	@ExceptionHandler(ExpiredJwtException.class)
+	public ResponseEntity<Object> handleException(ExpiredJwtException ex){
 		ResponseEntity<Object> response = new ResponseEntity<Object>(HttpStatus.FORBIDDEN);
 		return response;
 	}	

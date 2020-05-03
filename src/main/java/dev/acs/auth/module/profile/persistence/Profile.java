@@ -1,5 +1,12 @@
 package dev.acs.auth.module.profile.persistence;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToOne;
+
+import org.hibernate.envers.Audited;
+
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.user.persistence.User;
 import lombok.AllArgsConstructor;
@@ -7,9 +14,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.envers.Audited;
-
-import javax.persistence.*;
 
 @Data
 @SuperBuilder

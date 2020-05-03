@@ -11,12 +11,12 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@Api(value = "Login")
+@Api(value = "Login", tags = {"Login"})
 @RequestMapping(path = {"/"})
 public class LoginController {
 
     @ApiOperation(value = "Login")
-    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
     public void login(@RequestBody LoginDTO loginDTO){
     	throw new NotImplementedException("Not implemented because spring-boot intercepts login process");
     }

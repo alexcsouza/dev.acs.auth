@@ -5,12 +5,13 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.envers.Audited;
+
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.user.persistence.User;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.envers.Audited;
 
 @Data
 @SuperBuilder
