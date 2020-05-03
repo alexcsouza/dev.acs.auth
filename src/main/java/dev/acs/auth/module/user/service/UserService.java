@@ -11,6 +11,9 @@ import javax.security.sasl.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,6 +32,9 @@ import dev.acs.auth.module.user.service.dto.UserDTO;
 @Qualifier("UserService")
 public class UserService implements IUserService, UserDetailsService {
 
+	private String emailRegex = "[a-z0-9.]+@[a-z0-9]+.[a-z]+\\.([a-z]+)";
+	
+	// TODO: export to validation.properties
 	private List<String> passwordRegex = Arrays.asList(
 			// The string must contain at least 1 lowercase alphabetical character
 			".*[a-z].*",
@@ -70,6 +76,7 @@ public class UserService implements IUserService, UserDetailsService {
 			throw new EntityNotFoundException();
 		}
 		User user = userOptional.get();
+		user.setPassword(null);
 		return modelMapperBean.getModelMapper().map(user, UserDTO.class);
 		
 	}
@@ -81,13 +88,22 @@ public class UserService implements IUserService, UserDetailsService {
 			throw new EntityNotFoundException();
 		}
 		User user = userOptional.get();
+		user.setPassword(null);
 		return modelMapperBean.getModelMapper().map(user, UserDTO.class);
 	}
 
 	@Override
-	public List<UserDTO> getList() {
-		List<User> list = userRepository.findAll();
-		return list.stream().map(u -> modelMapperBean.getModelMapper().map(u, UserDTO.class)).collect(Collectors.toList());
+	public Page<UserDTO> getList(Pageable pageable) {
+		Page<User> list = userRepository.findAll(pageable);
+		List<UserDTO> dtoList = list.stream()
+			.map(
+					user -> {
+						user.setPassword(null);
+						return modelMapperBean.getModelMapper().map(user, UserDTO.class);
+					}
+			)
+			.collect(Collectors.toList());
+		return new PageImpl<>(dtoList, pageable, list.getTotalElements());  
 	}
 
 	@Override
@@ -103,6 +119,7 @@ public class UserService implements IUserService, UserDetailsService {
 			throw new IllegalArgumentException("User already registered");
 		}
 		
+		validateEmail(userDTO.getEmail());
 		validatePassword(userDTO.getPassword());
 
 		User user = modelMapperBean.getModelMapper().map(userDTO, User.class);
@@ -113,11 +130,20 @@ public class UserService implements IUserService, UserDetailsService {
 		return userDTO;
 
 	}
-	
+
+	// TODO: delegate to validation service
+	private void validateEmail(String email) {
+		if(!Pattern.matches(emailRegex, email)) {
+			throw new IllegalArgumentException("Invalid format for email.");
+		}
+	}
+
+	// TODO: delegate to password service
 	private String encodePassord(User user) {
 		return new BCryptPasswordEncoder(16).encode(user.getPassword());
 	}
 
+	// TODO: delegate to password service
 	private void validatePassword(String password) {
 		
 		// TODO: Make it more flexible indication the pattern that failed
@@ -134,6 +160,7 @@ public class UserService implements IUserService, UserDetailsService {
 		
 	}
 
+	// TODO: delegate to login service
 	@Override
 	public String authenticate(LoginDTO loginData) throws AuthenticationException {
 
@@ -148,12 +175,19 @@ public class UserService implements IUserService, UserDetailsService {
 
 	}
 
+	// TODO: delegate to login service
 	@Override
 	public UserDetails loadUserByUsername(String email){
 		// TODO: Load string from messages.properties
-		User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(String.format("No user identifyied by %s", email)));
-		//user.setPassword(encodePassord(user));
-		return CustomUserDetails.builder().user(user).build();
+		Optional<User> user = userRepository.findByEmail(email);
+		User userObj = null;
+		if( ! user.isPresent()) {
+			userObj = userRepository.findByAlias(email)
+					.orElseThrow(() ->new UsernameNotFoundException(String.format("No user identifyied by %s", email)));
+		}else {
+			userObj = user.get();
+		}
+		return CustomUserDetails.builder().user(userObj).build();
 	}
 
 	

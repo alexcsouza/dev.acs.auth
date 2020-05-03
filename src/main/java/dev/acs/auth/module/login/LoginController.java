@@ -11,7 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@Api(value = "Login")
+@Api(value = "Login", tags = {"Login"})
 @RequestMapping(path = {"/"})
 public class LoginController {
 

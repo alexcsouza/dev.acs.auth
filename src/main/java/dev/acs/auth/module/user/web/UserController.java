@@ -1,8 +1,8 @@
 package dev.acs.auth.module.user.web;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,13 +35,15 @@ public class UserController {
     @ApiOperation(value = "Get all users information")
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class)
-    public List<UserDTO> getList() {
-        return userService.getList();
+    public Page<UserDTO> getList(
+    		Integer size,
+    		Integer page
+    	) {
+        return userService.getList(PageRequest.of(page, size));
     }
 
     @ApiOperation(value = "Register new user")
     @PutMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class)
     public UserDTO registerUser(@RequestBody UserDTO userDTO) {
         return userService.registerUser(userDTO);
     }

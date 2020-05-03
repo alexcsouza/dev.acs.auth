@@ -1,9 +1,9 @@
 package dev.acs.auth.module.user.service;
 
-import java.util.List;
-
 import javax.security.sasl.AuthenticationException;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import dev.acs.auth.module.login.LoginDTO;
@@ -16,9 +16,9 @@ public interface IUserService{
 
 	UserDTO getUser(String email);
 
-	List<UserDTO> getList();
-
 	UserDTO registerUser(UserDTO userDTO);
 
     String authenticate(LoginDTO userName) throws AuthenticationException;
+
+	Page<UserDTO> getList(Pageable pageable);
 }

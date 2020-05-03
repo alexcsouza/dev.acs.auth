@@ -45,7 +45,7 @@ public class TokenAuthenticationService {
                 .setExpiration(new Date(System.currentTimeMillis() + Long.parseLong(expirationTime)))
                 .signWith(SignatureAlgorithm.HS512, secret)
                 .compact();
-        response.addHeader(headerString, prefix + " " + jwt);
+        response.addHeader(headerString, prefix + jwt);
         return response;
     }
 
@@ -56,7 +56,7 @@ public class TokenAuthenticationService {
             // faz parse do token
             String user = Jwts.parser()
                     .setSigningKey(secret)
-                    .parseClaimsJws(token.replace(prefix, ""))
+                    .parseClaimsJws(token.replace(prefix, "").trim())
                     .getBody()
                     .getSubject();
 
