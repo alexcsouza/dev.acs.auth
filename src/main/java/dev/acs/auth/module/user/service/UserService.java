@@ -11,6 +11,7 @@ import javax.security.sasl.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -54,12 +55,19 @@ public class UserService implements IUserService, UserDetailsService {
 	
 	@Autowired
 	private IUserRepository userRepository;
-
+	
+//		TODO: Before implement confirmation email, configure logs and environments for safety add SMTP data into application.properties
+//	@Autowired
+//	private UserEmailSend userEmailSend;
+	
 	@Autowired
 	private TokenAuthenticationService tokenAuthenticationService;
 	
 	@Autowired
 	private ModelMapperBean modelMapperBean;
+	
+	@Value("${auth.aurhentication.confirmation-required-to-authenticate:true}")
+	private boolean confirmationRequiredToAuthenticate;
 	
 	public UserService(IUserRepository userRepository, TokenAuthenticationService tokenAuthService, ModelMapperBean modelMapperBean) {
 		super();
@@ -69,7 +77,7 @@ public class UserService implements IUserService, UserDetailsService {
 	}
 	
 	@Override
-	public UserDTO getUser(Long id) {
+	public UserDTO get(Long id) {
 	
 		Optional<User> userOptional = userRepository.findById(id);
 		if(!userOptional.isPresent()){
@@ -82,7 +90,7 @@ public class UserService implements IUserService, UserDetailsService {
 	}
 
 	@Override
-	public UserDTO getUser(String email) {
+	public UserDTO get(String email) {
 		Optional<User> userOptional = userRepository.findByEmail(email);
 		if(!userOptional.isPresent()){
 			throw new EntityNotFoundException();
@@ -123,8 +131,13 @@ public class UserService implements IUserService, UserDetailsService {
 		validatePassword(userDTO.getPassword());
 
 		User user = modelMapperBean.getModelMapper().map(userDTO, User.class);
+		user.setConfirmed(false);
 		user.setPassword(encodePassord(user));
 		user = userRepository.save(user);
+		
+// 		TODO: Before implement confirmation email, configure logs and environments for safety add SMTP data into application.properties
+//		userEmailSend.sendRegistryConfirmationEmail(user);
+		
 		userDTO.setId(user.getId());
 		userDTO.setPassword(null);
 		return userDTO;
@@ -163,7 +176,6 @@ public class UserService implements IUserService, UserDetailsService {
 	// TODO: delegate to login service
 	@Override
 	public String authenticate(LoginDTO loginData) throws AuthenticationException {
-
 		UserDetails userDetails = loadUserByUsername(loginData.getUsername());
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();  
 		boolean valid = encoder.matches(loginData.getPassword(), userDetails.getPassword());
@@ -172,7 +184,6 @@ public class UserService implements IUserService, UserDetailsService {
 			throw new AuthenticationException("Invalid username or password");
 		}
 		return tokenAuthenticationService.addAuthentication(userDetails);
-
 	}
 
 	// TODO: delegate to login service
@@ -187,9 +198,12 @@ public class UserService implements IUserService, UserDetailsService {
 		}else {
 			userObj = user.get();
 		}
+		
+		if(confirmationRequiredToAuthenticate && !userObj.getConfirmed().booleanValue()) {
+			throw new UsernameNotFoundException("User not cofirmed.");
+		}
+		
 		return CustomUserDetails.builder().user(userObj).build();
 	}
-
-	
 
 }

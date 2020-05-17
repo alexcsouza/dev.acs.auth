@@ -65,7 +65,7 @@ public class UserServiceTest {
 		
 		
 		
-		UserDTO userDTO = userService.getUser(id);
+		UserDTO userDTO = userService.get(id);
 		
 		assertThat(userDTO)
 		.withFailMessage("User not returned on get method")
@@ -87,7 +87,7 @@ public class UserServiceTest {
 		when(userRepository.findById(id)).thenReturn(Optional.ofNullable(null));
 		
 		// TODO: Load string from messages.properties
-		assertThatThrownBy(() -> userService.getUser(id))
+		assertThatThrownBy(() -> userService.get(id))
 		.withFailMessage("Should throw IllegalArgumentException.")
 		.isInstanceOf(EntityNotFoundException.class);
 		
@@ -113,7 +113,7 @@ public class UserServiceTest {
 					);
 		
 		
-		UserDTO userDTO = userService.getUser(email);
+		UserDTO userDTO = userService.get(email);
 		
 		assertThat(userDTO)
 		.withFailMessage("User not returned on get method")
@@ -132,7 +132,7 @@ public class UserServiceTest {
 	
 		String email = "admin@test.it";
 		when(userRepository.findByEmail(email)).thenReturn(Optional.ofNullable(null));
-		assertThatThrownBy(() -> userService.getUser(email))
+		assertThatThrownBy(() -> userService.get(email))
 		.withFailMessage("Should throw IllegalArgumentException.")
 		.isInstanceOf(EntityNotFoundException.class);
 
@@ -337,12 +337,7 @@ public class UserServiceTest {
 				.build();
 		
 		when(userRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(userPersisted));
-		try {
-		userService.authenticate(userDTO);
-		}catch(Throwable e) {
-			System.out.println(e);
-		}
-		
+				
 		assertThatThrownBy(() -> {userService.authenticate(userDTO);})
 		.withFailMessage("Should throw AuthenticationException.")
 		.isInstanceOf(AuthenticationException.class)

@@ -13,7 +13,7 @@ import org.hibernate.envers.Audited;
 
 import dev.acs.auth.core.persistence.PersistentEntity;
 import dev.acs.auth.module.profile.persistence.Profile;
-import dev.acs.auth.module.usergroup.UserGroup;
+import dev.acs.auth.module.usergroup.persistence.UserGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -41,6 +41,8 @@ public class User extends PersistentEntity {
 	private String alias;
 	
 	private String password;
+	
+	private Boolean confirmed;
 
 	private Profile profile;
 

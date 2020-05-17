@@ -29,7 +29,7 @@ public class UserController {
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class)
     public UserDTO get(@PathVariable(required = true) long id) {
-        return userService.getUser(id);
+        return userService.get(id);
     }
 
     @ApiOperation(value = "Get all users information")

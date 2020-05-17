@@ -1,4 +1,4 @@
-package dev.acs.auth.module.usergroup;
+package dev.acs.auth.module.usergroup.persistence;
 
 import java.util.List;
 
