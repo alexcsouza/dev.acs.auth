@@ -7,31 +7,25 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
-import javax.security.sasl.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import dev.acs.auth.core.bean.ModelMapperBean;
-import dev.acs.auth.module.login.LoginDTO;
-import dev.acs.auth.module.login.TokenAuthenticationService;
+import dev.acs.auth.module.user.dto.UserDTO;
 import dev.acs.auth.module.user.persistence.IUserRepository;
 import dev.acs.auth.module.user.persistence.User;
-import dev.acs.auth.module.user.security.CustomUserDetails;
-import dev.acs.auth.module.user.service.dto.UserDTO;
 
 @Service
 @Qualifier("UserService")
-public class UserService implements IUserService, UserDetailsService {
+public class UserService implements IUserService
+//, UserDetailsService 
+{
 
 	private String emailRegex = "[a-z0-9.]+@[a-z0-9]+.[a-z]+\\.([a-z]+)";
 	
@@ -61,17 +55,12 @@ public class UserService implements IUserService, UserDetailsService {
 //	private UserEmailSend userEmailSend;
 	
 	@Autowired
-	private TokenAuthenticationService tokenAuthenticationService;
-	
-	@Autowired
 	private ModelMapperBean modelMapperBean;
 	
-	@Value("${auth.aurhentication.confirmation-required-to-authenticate:true}")
-	private boolean confirmationRequiredToAuthenticate;
 	
-	public UserService(IUserRepository userRepository, TokenAuthenticationService tokenAuthService, ModelMapperBean modelMapperBean) {
+	public UserService(IUserRepository userRepository, ModelMapperBean modelMapperBean) {
 		super();
-		this.tokenAuthenticationService = tokenAuthService;
+
 		this.userRepository = userRepository;
 		this.modelMapperBean = modelMapperBean;
 	}
@@ -173,37 +162,42 @@ public class UserService implements IUserService, UserDetailsService {
 		
 	}
 
-	// TODO: delegate to login service
 	@Override
-	public String authenticate(LoginDTO loginData) throws AuthenticationException {
-		UserDetails userDetails = loadUserByUsername(loginData.getUsername());
-		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();  
-		boolean valid = encoder.matches(loginData.getPassword(), userDetails.getPassword());
-		if(!valid) {
-			// TODO: Load string from messages.properties
-			throw new AuthenticationException("Invalid username or password");
-		}
-		return tokenAuthenticationService.addAuthentication(userDetails);
+	public UserDTO save(UserDTO userDTO) {
+		return null;
 	}
 
-	// TODO: delegate to login service
-	@Override
-	public UserDetails loadUserByUsername(String email){
-		// TODO: Load string from messages.properties
-		Optional<User> user = userRepository.findByEmail(email);
-		User userObj = null;
-		if( ! user.isPresent()) {
-			userObj = userRepository.findByAlias(email)
-					.orElseThrow(() ->new UsernameNotFoundException(String.format("No user identifyied by %s", email)));
-		}else {
-			userObj = user.get();
-		}
-		
-		if(confirmationRequiredToAuthenticate && !userObj.getConfirmed().booleanValue()) {
-			throw new UsernameNotFoundException("User not cofirmed.");
-		}
-		
-		return CustomUserDetails.builder().user(userObj).build();
-	}
+//	// TODO: delegate to login service
+//	@Override
+//	public String authenticate(LoginDTO loginData) throws AuthenticationException {
+//		UserDetails userDetails = loadUserByUsername(loginData.getUsername());
+//		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();  
+//		boolean valid = encoder.matches(loginData.getPassword(), userDetails.getPassword());
+//		if(!valid) {
+//			// TODO: Load string from messages.properties
+//			throw new AuthenticationException("Invalid username or password");
+//		}
+//		return tokenAuthenticationService.addAuthentication(userDetails);
+//	}
+//
+//	// TODO: delegate to login service
+//	@Override
+//	public UserDetails loadUserByUsername(String email){
+//		// TODO: Load string from messages.properties
+//		Optional<User> user = userRepository.findByEmail(email);
+//		User userObj = null;
+//		if( ! user.isPresent()) {
+//			userObj = userRepository.findByAlias(email)
+//					.orElseThrow(() ->new UsernameNotFoundException(String.format("No user identifyied by %s", email)));
+//		}else {
+//			userObj = user.get();
+//		}
+//		
+//		if(confirmationRequiredToAuthenticate && !userObj.getConfirmed().booleanValue()) {
+//			throw new UsernameNotFoundException("User not cofirmed.");
+//		}
+//		
+//		return CustomUserDetails.builder().user(userObj).build();
+//	}
 
 }

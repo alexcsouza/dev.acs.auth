@@ -1,4 +1,4 @@
-package dev.acs.auth.module.user.security.dto;
+package dev.acs.auth.module.profile.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserGroupDTO {
-	private Long id;
-	private String name;
-	private String description;
+public class ProfileDTO {
+	
+    private String fullName;
+    private String about;
+    
 }

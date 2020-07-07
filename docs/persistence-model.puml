@@ -1,0 +1,36 @@
+@startuml Class Diagram Persistence Model
+!define DARKBLUE
+!includeurl https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
+
+
+class PersistentEntity{
+	- Long id;
+	- Date version;
+	- Date lastUpdateDate;
+	- Date creationDate;
+	- void onInsert()
+    - void onUpdate()
+}
+note right of PersistentEntity : Basic class for persistent units.\nCreate audit logs a standard ids field.
+
+class User extends PersistentEntity {
+
+	- String name
+	- String email
+	- String alias
+	- String password
+	- Boolean confirmed
+	- Profile profile
+	- List<UserGroup> userGroups
+}
+
+class UserGroup extends PersistentEntity {
+	- String name;
+	- String description;
+	- List<User> userList;
+}
+
+User "*" <--> "*" UserGroup
+
+
+@enduml

@@ -1,4 +1,4 @@
-package dev.acs.auth.module.login;
+package dev.acs.auth.module.login.web;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.MediaType;
@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.acs.auth.module.login.dto.LoginDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 

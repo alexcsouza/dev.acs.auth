@@ -1,8 +1,10 @@
 package dev.acs.auth.module.feature;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.envers.Audited;
 
@@ -32,7 +34,7 @@ public class Feature extends PersistentEntity {
 	@ManyToOne
 	private Module module;
 
-	@OneToOne
-	private Permission permission;
+	@OneToMany
+	private List<Permission> permissionsGranted;
 
 }

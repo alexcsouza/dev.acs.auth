@@ -16,8 +16,8 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import dev.acs.auth.module.login.LoginDTO;
-import dev.acs.auth.module.login.TokenAuthenticationService;
+import dev.acs.auth.module.login.dto.LoginDTO;
+import dev.acs.auth.module.login.service.TokenAuthenticationService;
 
 
 public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {

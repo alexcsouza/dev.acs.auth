@@ -15,7 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import dev.acs.auth.core.security.JWTAuthenticationFilter;
 import dev.acs.auth.core.security.JWTLoginFilter;
-import dev.acs.auth.module.login.TokenAuthenticationService;
+import dev.acs.auth.module.login.service.TokenAuthenticationService;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +23,7 @@ import dev.acs.auth.module.login.TokenAuthenticationService;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    @Qualifier("UserService")
+    @Qualifier("LoginService")
     private UserDetailsService jwtUserDetailsService;
 
     @Autowired

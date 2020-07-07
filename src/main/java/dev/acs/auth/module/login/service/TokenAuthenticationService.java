@@ -1,4 +1,4 @@
-package dev.acs.auth.module.login;
+package dev.acs.auth.module.login.service;
 
 import java.util.Collections;
 import java.util.Date;

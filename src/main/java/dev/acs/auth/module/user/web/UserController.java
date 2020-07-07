@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.acs.auth.core.exception.RowNotFound;
+import dev.acs.auth.module.user.dto.UserDTO;
 import dev.acs.auth.module.user.service.IUserService;
-import dev.acs.auth.module.user.service.dto.UserDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -28,7 +29,7 @@ public class UserController {
     @ApiOperation(value = "Get user information")
     @GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiImplicitParam(name = "Authorization", value = "Access Token", required = true, paramType = "header", dataTypeClass = String.class)
-    public UserDTO get(@PathVariable(required = true) long id) {
+    public UserDTO get(@PathVariable(required = true) long id) throws RowNotFound{
         return userService.get(id);
     }
 
@@ -38,7 +39,7 @@ public class UserController {
     public Page<UserDTO> getList(
     		Integer size,
     		Integer page
-    	) {
+    	) throws RowNotFound {
         return userService.getList(PageRequest.of(page, size));
     }
 

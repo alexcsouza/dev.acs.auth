@@ -14,7 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
-import dev.acs.auth.module.login.TokenAuthenticationService;
+import dev.acs.auth.module.login.service.TokenAuthenticationService;
 
 @Component
 public class JWTAuthenticationFilter extends GenericFilterBean {

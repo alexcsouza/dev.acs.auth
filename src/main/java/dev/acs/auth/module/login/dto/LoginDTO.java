@@ -1,4 +1,4 @@
-package dev.acs.auth.module.user.service.dto;
+package dev.acs.auth.module.login.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,13 +6,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO{
-    private Long id;
-    private String name;
+@Builder
+public class LoginDTO {
+    private String username;
     private String password;
-    private String email;
-    private String alias;
 }

@@ -1,4 +1,4 @@
-package dev.acs.auth.module.login;
+package dev.acs.auth.module.usergroup.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -6,10 +6,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class LoginDTO {
-    private String username;
-    private String password;
+public class UserGroupDTO {
+	private Long id;
+	private String name;
+	private String description;
 }

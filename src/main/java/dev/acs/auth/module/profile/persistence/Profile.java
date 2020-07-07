@@ -31,5 +31,9 @@ public class Profile extends PersistentEntity {
             joinColumns = { @JoinColumn(name = "profile_id") },
             inverseJoinColumns = { @JoinColumn(name = "user_id") })
     private User user;
-
+    
+    private String fullName;
+    
+    private String about;
+    
 }

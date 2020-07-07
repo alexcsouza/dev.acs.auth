@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import dev.acs.auth.core.bean.ModelMapperBean;
 import dev.acs.auth.core.exception.RowNotFound;
-import dev.acs.auth.module.user.security.dto.UserGroupDTO;
+import dev.acs.auth.module.usergroup.dto.UserGroupDTO;
 import dev.acs.auth.module.usergroup.persistence.IUserGroupRepository;
 import dev.acs.auth.module.usergroup.persistence.UserGroup;
 

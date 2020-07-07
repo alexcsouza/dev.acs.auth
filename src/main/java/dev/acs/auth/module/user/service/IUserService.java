@@ -1,24 +1,22 @@
 package dev.acs.auth.module.user.service;
 
-import javax.security.sasl.AuthenticationException;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import dev.acs.auth.module.login.LoginDTO;
-import dev.acs.auth.module.user.service.dto.UserDTO;
+import dev.acs.auth.core.exception.RowNotFound;
+import dev.acs.auth.module.user.dto.UserDTO;
 
 @Service
 public interface IUserService{
 
-	UserDTO get(Long id);
+	UserDTO get(Long id) throws RowNotFound;
 
-	UserDTO get(String email);
+	UserDTO get(String email) throws RowNotFound;
 
 	UserDTO registerUser(UserDTO userDTO);
 
-    String authenticate(LoginDTO userName) throws AuthenticationException;
-
-	Page<UserDTO> getList(Pageable pageable);
+	Page<UserDTO> getList(Pageable pageable) throws RowNotFound;
+	
+	UserDTO save(UserDTO userDTO);
 }

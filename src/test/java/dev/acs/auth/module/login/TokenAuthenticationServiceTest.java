@@ -22,6 +22,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import dev.acs.auth.module.login.service.TokenAuthenticationService;
 import dev.acs.auth.module.user.persistence.User;
 import dev.acs.auth.module.user.security.CustomUserDetails;
 import io.jsonwebtoken.Jwts;
@@ -71,7 +72,7 @@ public class TokenAuthenticationServiceTest {
 		
 		assertThat(user)
 			.as("User")
-			.withFailMessage("User data extracted from token not match:\n%s\n%s", user, userExpected)
+			.withFailMessage("User data extracted from token don't match:\n%s\n%s", user, userExpected)
 			.isEqualTo(userExpected);
 		
 	}
@@ -84,7 +85,7 @@ public class TokenAuthenticationServiceTest {
         HttpServletResponse response = mock(HttpServletResponse.class);  
 		response = tokenAuthService.addAuthentication(response, cud.getUsername());
 		
-		// Testins just that is called for now
+		// Testing just that is called for now
 		verify(response, times(1)).addHeader(Mockito.eq(headerString), Mockito.anyString());
 		
 	}

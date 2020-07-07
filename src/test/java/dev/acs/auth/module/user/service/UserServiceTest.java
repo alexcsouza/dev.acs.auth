@@ -9,21 +9,17 @@ import java.util.Date;
 import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
-import javax.security.sasl.AuthenticationException;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import dev.acs.auth.core.bean.ModelMapperBean;
-import dev.acs.auth.module.login.LoginDTO;
-import dev.acs.auth.module.login.TokenAuthenticationService;
+import dev.acs.auth.module.user.dto.UserDTO;
 import dev.acs.auth.module.user.persistence.IUserRepository;
 import dev.acs.auth.module.user.persistence.User;
-import dev.acs.auth.module.user.service.dto.UserDTO;
 
 @RunWith(SpringRunner.class)
 // TODO: load messages in messages.properties
@@ -32,16 +28,14 @@ public class UserServiceTest {
 	
 	private UserService userService;
 	private IUserRepository userRepository;
-	private TokenAuthenticationService tokenAuthenticationService;
 	private ModelMapperBean modelMapperBean;
 	
 	@Before
 	public void init() {
 		userRepository = mock(IUserRepository.class);
-		tokenAuthenticationService = mock(TokenAuthenticationService.class);
 		modelMapperBean = new ModelMapperBean();//mock(ModelMapperBean.class);
 		modelMapperBean.init();
-		userService = new UserService(userRepository, tokenAuthenticationService, modelMapperBean);
+		userService = new UserService(userRepository, modelMapperBean);
 	}
 	
 	@Test
@@ -217,16 +211,6 @@ public class UserServiceTest {
 				.password("123@Admin")
 				.build();
 		
-//		User userPersisted = User
-//				.builder()
-//				.id(2L)
-//				.name("user name")
-//				.email("admin@test.it")
-//				.password("123@Admin")
-//				.build();
-		
-//		when(userRepository.findByEmail(userDTO.getEmail())).thenReturn(Optional.of(userPersisted));
-		
 		// TODO: Load string from messages.properties
 		assertThatThrownBy(() -> userService.registerUser(userDTO))
 		.isInstanceOf(IllegalArgumentException.class)
@@ -302,50 +286,6 @@ public class UserServiceTest {
 		.isNull();
 		
 	}	
-	
-	@Test
-	public void whenAuthenticate_thenUserNameIsIncorrect() {
-		
-		LoginDTO userDTO = LoginDTO
-				.builder()
-				.password("123@Admin")
-				.username("admin123")
-				.build();
-		
-		assertThatThrownBy(() -> {userService.authenticate(userDTO);})
-		.withFailMessage("Should throw UsernameNotFoundException.")
-		.isInstanceOf(UsernameNotFoundException.class);
-		
-	}
-
-	@Test
-	public void whenAuthenticate_thenPasswordIsIncorrect() {
-		
-		LoginDTO userDTO = LoginDTO
-				.builder()
-				.password("WrongPassword")
-				.username("admin@test.it")
-				.build();
-		
-		
-		User userPersisted = User
-				.builder()
-				.id(2L)
-				.name("user name")
-				.email("admin@test.it")
-				.password("123@Admin")
-				.build();
-		
-		when(userRepository.findByEmail(Mockito.anyString())).thenReturn(Optional.of(userPersisted));
-				
-		assertThatThrownBy(() -> {userService.authenticate(userDTO);})
-		.withFailMessage("Should throw AuthenticationException.")
-		.isInstanceOf(AuthenticationException.class)
-		.withFailMessage("Should contains the invalid password error massage.")
-		.hasMessage("Invalid username or password")
-		;
-		
-	}
 	
 	
 }
