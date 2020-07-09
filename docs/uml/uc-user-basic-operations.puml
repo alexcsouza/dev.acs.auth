@@ -1,0 +1,60 @@
+@startuml use-case
+!define DARKBLUE
+!includeurl https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
+
+left to right direction
+
+'
+' Some use cases was added but, for simplicity, by now, will be comment.
+' After some basic implementations, start to make it more robust.
+'
+
+actor "Self Register User" as selfRegistrationUser
+actor "Admin User" as adminUser
+' actor "App API User" as appApiUser ' 
+
+package Login {
+  usecase "Sign in" as signIn
+  usecase "Sign up" as signUp
+  usecase "Recover login data" as recoverLogin
+  usecase "Confirm registration" as confirmRegistration
+}
+note right of Login : Login related operations
+
+package UserManagement {
+  usecase "Create user" as createUser
+  ' usecase "Create user on my app" as createUserOnMyApp '
+  ' usecase "Create admin user" as createUser '
+  usecase "Edit user data" as editUser
+  ' usecase "Edit user data on my app" as editUserOnMyApp '
+  usecase "Remove user" as removeUser
+  ' usecase "Remove user on my app" as removeUser '
+
+  ' usecase "Block user" as blockUser '
+  ' usecase "Block user on my app" as blockUserOnMyApp '
+
+  usecase "Edit my username" as editMyUserName
+  usecase "Edit my password" as editMyPassword
+}
+note right of UserManagement : User management related operations
+
+' createUserOnMyApp .> createUser : include '
+
+adminUser -down-|> selfRegistrationUser
+
+selfRegistrationUser --> signUp
+selfRegistrationUser --> signIn
+selfRegistrationUser --> recoverLogin
+selfRegistrationUser --> confirmRegistration
+
+selfRegistrationUser --> editMyUserName
+selfRegistrationUser --> editMyPassword
+
+adminUser -> createUser
+adminUser -> editUser
+adminUser -> removeUser
+' adminUser -> blockUser '
+
+' appApiUser --> createUserOnMyApp '
+
+@enduml

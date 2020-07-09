@@ -1,0 +1,37 @@
+@startuml Sequence Diagram - User self registration
+!define DARKBLUE
+!includeurl https://raw.githubusercontent.com/Drakemor/RedDress-PlantUML/master/style.puml
+
+Client -> UserController ++ : registerUser
+UserController -> UserService ++ : registerUser
+
+    UserService -> UserService ++ : checkExistance
+    return user not exists
+
+    UserService -> PasswordService ++ : checkPasswordStrength
+    return passoword ok
+
+        UserService -> UserRepository ++ : persistUser
+        return persisted
+
+    UserService -> UserEmailServce ** : sendConfirmation
+
+    return registered
+
+return 200
+
+Client -> UserController ++ : confirmUser
+
+    UserController -> UserService ++ : confirmUser
+    UserService -> UserService ++ : checkExistance
+    return exists
+
+        UserService -> UserRepository ++ : persistConfirmation
+        return persisted
+
+    UserService -> UserEmailServce ** : sendWellcomeMessage
+    
+return 200
+
+
+@enduml
